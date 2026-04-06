@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\(main|index\\)\\\\.ts$\")",
+      "Bash(npx shadcn-nuxt@latest add checkbox badge pagination)",
+      "Bash(pnpm dlx:*)"
+    ]
+  }
+}
