@@ -73,7 +73,7 @@ const filters: { key: keyof WordQuery; label: string }[] = [
 
 <template>
   <div
-    class="w-[1200px] mx-auto mt-10 bg-linear-to-br from-blue-50 to-indigo-50 rounded-[20px] p-20 shadow-lg flex flex-col h-[calc(100vh-100px)] py-10"
+    class="w-[1200px] mx-auto mt-10 bg-linear-to-br from-blue-50 to-indigo-50 rounded-[20px] p-20 shadow-lg flex flex-col h-[calc(100vh-120px)] py-10"
   >
     <!-- 标题区 -->
     <div class="h-20">

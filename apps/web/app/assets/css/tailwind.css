@@ -128,9 +128,7 @@ html,body {
   font-family:  "Microsoft YaHei-Regular";
  
 }
-html, body {
-   overflow: hidden;
-}
+
 
 /* lyrics page slide-up transition */
 .slide-up-enter-active,
