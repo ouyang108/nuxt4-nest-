@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 // import { getWordBookList } from "@/apis/word-book";
 import type { WordQuery, WordList } from "@en/common";
 import { BookOpen, Volume2 } from "lucide-vue-next";
+import { WORD_API } from "~/constants/api";
 // import { useAudio } from "@/hooks/useAudio";
 let speakContent: (text: string) => void;
 onMounted(() => {
@@ -30,7 +31,7 @@ const {
   pending,
   error,
   refresh,
-} = await useLazyFetch("/api/wordbooks", {
+} = await useLazyFetch(WORD_API, {
   params: query,
   watch: false,
 });
@@ -106,7 +107,22 @@ const filters: { key: keyof WordQuery; label: string }[] = [
 
     <!-- 单词卡片列表 -->
     <div class="grid grid-cols-3 gap-2 overflow-y-auto flex-1">
+      <!-- loading 骨架屏 -->
+      <template v-if="pending">
+        <div
+          v-for="i in query.pageSize"
+          :key="i"
+          class="bg-white border border-blue-200 rounded-[10px] p-4 h-[220px] animate-pulse"
+        >
+          <div class="h-4 bg-blue-100 rounded w-1/3 mb-3"></div>
+          <div class="h-3 bg-gray-100 rounded w-1/2 mb-3"></div>
+          <div class="h-3 bg-gray-100 rounded w-full mb-2"></div>
+          <div class="h-3 bg-gray-100 rounded w-5/6 mb-2"></div>
+          <div class="h-3 bg-gray-100 rounded w-4/6 mt-6"></div>
+        </div>
+      </template>
       <div
+        v-else
         v-for="item in result.list || []"
         :key="item.id"
         class="bg-white hover:bg-blue-50 border border-blue-200 text-gray-800 rounded-[10px] p-4 cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md h-[220px]"

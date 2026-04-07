@@ -4,5 +4,4 @@ export default defineAppConfig({
     mode: "css",
     cssLayer: "base",
   },
-  baseURL: "http://localhost:3001",
 });
