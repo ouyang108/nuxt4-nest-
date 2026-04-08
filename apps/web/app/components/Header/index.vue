@@ -12,7 +12,7 @@
       <div
         v-for="menu in menus"
         :key="menu.path"
-        @click="router.push(menu.path)"
+        @click="changePath(menu.path)"
         :class="[
           'flex items-center gap-2 cursor-pointer rounded-[10px] px-2 py-1',
           isActive(menu.path)
@@ -49,16 +49,24 @@
 </template>
 
 <script setup lang="ts">
+import { BLOCKED_ROUTES } from "../../constants/router";
+const { isOpenLogin } = useAuth("web");
 const router = useRouter();
 const route = useRoute();
 
 const menus = [
-  { path: '/home', icon: 'mdi:home', label: '主页' },
-  { path: '/smart/chat', icon: 'mdi:auto-fix', label: 'AI' },
-  { path: '/word-book/index', icon: 'mdi:notebook', label: '词库' },
-  { path: '/courses/index', icon: 'mdi:book-open-variant', label: '课程' },
-  { path: '/setting/index', icon: 'mdi:cog', label: '设置' },
+  { path: "/home", icon: "mdi:home", label: "主页" },
+  { path: "/smart/chat", icon: "mdi:auto-fix", label: "AI" },
+  { path: "/word-book/index", icon: "mdi:notebook", label: "词库" },
+  { path: "/courses/index", icon: "mdi:book-open-variant", label: "课程" },
+  { path: "/setting/index", icon: "mdi:cog", label: "设置" },
 ];
+const changePath = (path: string) => {
+  isOpenLogin(path);
+  if (route.path !== path) {
+    router.push(path);
+  }
+};
 
 const isActive = (path: string) => route.path === path;
 </script>

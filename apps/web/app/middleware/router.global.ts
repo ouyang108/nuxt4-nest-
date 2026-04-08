@@ -1,4 +1,5 @@
 import { BLOCKED_ROUTES } from "../constants/router";
+
 export default defineNuxtRouteMiddleware((to, from) => {
   //   if (to.params.id === '1') {
   //     return abortNavigation()
@@ -15,6 +16,17 @@ export default defineNuxtRouteMiddleware((to, from) => {
   } else {
     // 需要判断是否登录
     // return navigateTo("/home");
-    return abortNavigation();
+    // return abortNavigation();
+    if (!from.name) {
+      // 强制跳转到首页，并标记需要弹窗
+      // const { openLoginModal } = useLoginState();
+      return navigateTo("/home");
+    }
+    if (import.meta.client) {
+      // openModal();
+      // 终止本次跳转，用户留在原页
+
+      return abortNavigation();
+    }
   }
 });

@@ -13,6 +13,7 @@ const Business = {
 export class ResponseService {
   success(data: any) {
     return {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data,
       code: Business.SUCCESS.code,
       message: Business.SUCCESS.message,

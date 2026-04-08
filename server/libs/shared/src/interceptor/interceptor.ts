@@ -1,4 +1,9 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 
 // 将bigint转换为字符串，并保留日期类型不变
@@ -14,7 +19,7 @@ const transformBigInt = (obj: any) => {
       return obj;
     }
     return Object.fromEntries(
-      Object.entries(obj).map(([key, value]) => [key, transformBigInt(value)])
+      Object.entries(obj).map(([key, value]) => [key, transformBigInt(value)]),
     );
   }
   return obj;
@@ -23,8 +28,8 @@ const transformBigInt = (obj: any) => {
 @Injectable()
 export class InterceptorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const ctx = context.switchToHttp()
-    const request = ctx.getRequest()
+    const ctx = context.switchToHttp();
+    const request = ctx.getRequest();
     return next.handle().pipe(
       map((data) => {
         return {
@@ -33,9 +38,9 @@ export class InterceptorInterceptor implements NestInterceptor {
           message: data?.message || '请求成功',
           code: data?.code || 200,
           success: true,
-          data: transformBigInt(data?.data) ?? null
-        }
-      })
-    )
+          data: transformBigInt(data?.data) ?? null,
+        };
+      }),
+    );
   }
 }

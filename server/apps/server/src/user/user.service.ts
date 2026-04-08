@@ -9,8 +9,15 @@ export class UserService {
     private readonly prisma: PrismaService,
     private readonly response: ResponseService,
   ) {}
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUser: CreateUserDto) {
+    try {
+      const res = await this.prisma.user.create({ data: createUser });
+
+      return this.response.success(res);
+    } catch (error) {
+      console.error('Error in create user:', error);
+      throw error; // Rethrow the error after logging it
+    }
   }
 
   async findAll() {
@@ -23,7 +30,11 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    try {
+    } catch (error) {
+      console.error('Error in update user:', error);
+      throw error; // Rethrow the error after logging it
+    }
   }
 
   remove(id: number) {
