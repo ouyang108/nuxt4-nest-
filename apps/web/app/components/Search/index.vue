@@ -1,36 +1,27 @@
 <script setup lang="ts">
 import { Search } from "lucide-vue-next";
 import { WORD_API } from "~/constants/api";
-import type { Word } from "@en/common";
+import type { Word, WordList } from "@en/common";
+import { $request } from "~/utils/request";
+
 const wordList = ref<Word[]>([]);
 const { isOpen } = useSearchShortcuts();
-const copyWord = (word: string) => {
-  // http环境不支持复制
 
+const copyWord = (word: string) => {
   if (navigator.clipboard) {
-    navigator.clipboard
-      .writeText(word)
-      .then(() => {
-        console.log("复制成功");
-      })
-      .catch((err) => {
-        console.error("复制失败:", err);
-      });
-  } else {
-    console.error("当前环境不支持复制功能");
+    navigator.clipboard.writeText(word).catch((err) => {
+      console.error("复制失败:", err);
+    });
   }
 };
+
 // 可以使用虚拟列表来优化性能，这样就不做分页了
 const getList = async () => {
-  const res = await $fetch(WORD_API, {
-    params: {
-      word: search.value,
-      page: 1,
-      pageSize: 20,
-    },
+  const data = await $request<WordList>(WORD_API, {
+    params: { word: search.value, page: 1, pageSize: 20 },
+    skipAuth: true,
   });
-
-  wordList.value = res.data.list || [];
+  wordList.value = data.list ?? [];
 };
 let timer: ReturnType<typeof setTimeout> | null = null;
 const search = customRef((track, trigger) => {

@@ -10,39 +10,18 @@
       </div>
       <div class="text-2xl font-bold">English App</div>
       <div
-        @click="router.push('/home')"
-        class="flex items-center gap-2 cursor-pointer rounded-[10px] px-2 py-1 text-gray-500"
+        v-for="menu in menus"
+        :key="menu.path"
+        @click="router.push(menu.path)"
+        :class="[
+          'flex items-center gap-2 cursor-pointer rounded-[10px] px-2 py-1',
+          isActive(menu.path)
+            ? 'bg-indigo-100 text-indigo-700 font-semibold'
+            : 'text-gray-500 hover:bg-gray-100',
+        ]"
       >
-        <Icon name="mdi:home" class="text-xl" />
-        <span>主页</span>
-      </div>
-      <div
-        @click="router.push('/smart/chat')"
-        class="flex items-center gap-2 cursor-pointer text-gray-500"
-      >
-        <Icon name="mdi:auto-fix" class="text-xl" />
-        <span>AI</span>
-      </div>
-      <div
-        @click="router.push('/word-book/index')"
-        class="flex items-center gap-2 cursor-pointer text-gray-500"
-      >
-        <Icon name="mdi:notebook" class="text-xl" />
-        <span>词库</span>
-      </div>
-      <div
-        @click="router.push('/courses/index')"
-        class="flex items-center gap-2 cursor-pointer text-gray-500"
-      >
-        <Icon name="mdi:book-open-variant" class="text-xl" />
-        <span>课程</span>
-      </div>
-      <div
-        @click="router.push('/setting/index')"
-        class="flex items-center gap-2 cursor-pointer text-gray-500"
-      >
-        <Icon name="mdi:cog" class="text-xl" />
-        <span>设置</span>
+        <Icon :name="menu.icon" class="text-xl" />
+        <span>{{ menu.label }}</span>
       </div>
       <div
         class="flex items-center gap-2 bg-blue-200 text-blue-700 rounded-full px-2 py-1"
@@ -71,4 +50,15 @@
 
 <script setup lang="ts">
 const router = useRouter();
+const route = useRoute();
+
+const menus = [
+  { path: '/home', icon: 'mdi:home', label: '主页' },
+  { path: '/smart/chat', icon: 'mdi:auto-fix', label: 'AI' },
+  { path: '/word-book/index', icon: 'mdi:notebook', label: '词库' },
+  { path: '/courses/index', icon: 'mdi:book-open-variant', label: '课程' },
+  { path: '/setting/index', icon: 'mdi:cog', label: '设置' },
+];
+
+const isActive = (path: string) => route.path === path;
 </script>

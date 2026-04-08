@@ -6,10 +6,17 @@ export default defineNuxtConfig({
 
   modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxtjs/tailwindcss", "shadcn-nuxt"],
   runtimeConfig: {
+    // 仅服务端可访问，用于 server route 直连后端
+    apiInternalBase: process.env.API_INTERNAL_BASE || "http://localhost:3001",
     // public 里的变量在客户端和服务器端均可访问
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:3000", // 备选默认值
     },
+  },
+  // 路由  实验性功能
+  routeRules: {
+    "/": { prerender: true }, // 首页开启 prerender 直接生成 HTML
+    "/home": { prerender: true }, // 首页开启 prerender
   },
   shadcn: {
     /**

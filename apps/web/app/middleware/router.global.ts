@@ -14,6 +14,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return;
   } else {
     // 需要判断是否登录
-    return navigateTo("/home");
+    // return navigateTo("/home");
+    return abortNavigation();
   }
 });

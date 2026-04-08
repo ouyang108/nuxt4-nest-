@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-// import { getWordBookList } from "@/apis/word-book";
 import type { WordQuery, WordList } from "@en/common";
 import { BookOpen, Volume2 } from "lucide-vue-next";
 import { WORD_API } from "~/constants/api";
-// import { useAudio } from "@/hooks/useAudio";
+
 let speakContent: (text: string) => void;
 onMounted(() => {
-  // getList();
   const { speak } = useAudio({});
   speakContent = speak;
 });
 
-const list = ref<WordList["list"]>([]);
 const query = ref<WordQuery>({
   page: 1,
   pageSize: 20,
@@ -26,28 +23,20 @@ const query = ref<WordQuery>({
   cet4: false,
   ky: false,
 });
-const {
-  data: res,
-  pending,
-  error,
-  refresh,
-} = await useLazyFetch(WORD_API, {
+
+// useLazyRequest 内部使用 useLazyFetch：不阻塞导航，用 pending 控制骨架屏
+const { data, pending, refresh } = useLazyRequest<WordList>(WORD_API, {
   params: query,
   watch: false,
 });
+
+// 收窄类型：data 可能为 null（错误时 transform 返回 null）
+const result = computed<WordList>(() => data.value as WordList ?? { list: [], total: 0 });
 
 const searchWord = () => {
   query.value.page = 1;
   refresh();
 };
-const result = computed(() => res.value?.data || {});
-// const getList = async () => {
-//   const res = await getWordBookList(query.value);
-//   if (res.success) {
-//     total.value = res.data.total;
-//     list.value = res.data.list;
-//   }
-// };
 
 const onPageChange = (page: number) => {
   query.value.page = page;
@@ -135,7 +124,7 @@ const filters: { key: keyof WordQuery; label: string }[] = [
           <button
             class="text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
           >
-            <Volume2 class="size-4" @click="speakContent(item.phonetic)" />
+            <Volume2 class="size-4" @click="speakContent(item.phonetic ?? '')" />
           </button>
         </div>
         <div class="text-sm text-gray-700 mb-1 overflow-hidden line-clamp-2">
